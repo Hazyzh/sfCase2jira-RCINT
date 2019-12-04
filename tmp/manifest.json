@@ -1,0 +1,40 @@
+{
+  "name": "sfCase2JiraTicket",
+  "description" : "helper tool",
+  "version": "1.0",
+  "manifest_version": 2,
+  "browser_action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "images/16.png",
+      "32": "images/32.png",
+      "48": "images/48.png",
+      "128": "images/128.png"
+    }
+  },
+  "icons": {
+    "16": "images/16.png",
+    "32": "images/32.png",
+    "48": "images/48.png",
+    "128": "images/128.png"
+  },
+  "permissions": [
+    "storage",
+    "*://*.google.com/",
+    "http://*/",
+    "https://*/",
+    "webRequest",
+    "webRequestBlocking",
+    "declarativeContent"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://rc.my.salesforce.com/500*"],
+      "js": ["content-script.js"]
+    }
+  ]
+}
