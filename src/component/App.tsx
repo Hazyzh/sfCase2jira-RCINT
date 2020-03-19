@@ -1,4 +1,4 @@
-import React,{ useState } from 'react';
+import React,{ ReactElement, useState } from 'react';
 import Fab from '@material-ui/core/Fab';
 import EditModal from './EditModal';
 import LoginModal from './LoginModal';
@@ -12,7 +12,7 @@ export default function App({ initInfos } : { initInfos: initInfosProps }) {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [componentsList, setComponentsList] = useState([]);
   const [infoOpen, setInfoOpen] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState();
 
 
   const handleOpen = async () => {
@@ -33,7 +33,7 @@ export default function App({ initInfos } : { initInfos: initInfosProps }) {
     setInfoOpen(false);
   }
 
-  const openInfo = (message: string) => {
+  const openInfo = (message: string | ReactElement) => {
     setMessage(message);
     setInfoOpen(true);
   }

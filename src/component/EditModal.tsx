@@ -11,6 +11,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import formatMessage from 'format-message';
+import Link from '@material-ui/core/Link';
+import copy from 'copy-to-clipboard'
 
 import { ModalProps } from '../interface';
 import jiraHelper from '../jiraHelper';
@@ -25,6 +27,25 @@ const MenuProps = {
     },
   },
 };
+
+export const InfoContent = ({ ticketId }: {ticketId: string}) => {
+  const [open, setOpen] = React.useState(true);
+  const link = `https://jira.ringcentral.com/browse/${ticketId}`;
+  return <div className="info-content-box">
+    <p>
+      <span>Create Succeed!</span>
+      <Link  target="_blank" href={link}>{link}</Link>
+    </p>
+    <Button
+      onClick={() => {
+        copy(link);
+        setOpen(false);
+      }}
+      size="small" >
+        {open ? "Copy Link" : "Copy succeed!"}
+    </Button>
+  </div>
+}
 
 export default function EditModal({open, onClose, initInfos, componentsList, openInfo}: ModalProps){
   const [infos, setInfo] = useState({...initInfos, components: []});
@@ -54,7 +75,7 @@ export default function EditModal({open, onClose, initInfos, componentsList, ope
       window.alert('Create error. try again later.');
     } else {
       onClose();
-      openInfo(`Create Succeed! -> https://jira.ringcentral.com/browse/${res.key}`);
+      openInfo(<InfoContent ticketId={res.key} />);
     }
     setCreateDisabled(false);
   }
