@@ -1,9 +1,10 @@
-
 import JiraClient from 'jira-connector';
-import { jiraAuth, jiraTicketTmp, createInfos } from './interface';
 
-
-
+import {
+  createInfos,
+  jiraAuth,
+  jiraTicketTmp,
+} from './interface';
 
 const getStorageKey = (key: string): Promise<any> => new Promise((r) => {
   chrome.storage.sync.get([key], ({[key]: value}) => {
@@ -45,28 +46,11 @@ class jiraHelper {
   }
 
   async getComponents (){
+
     if (this.components) return this.components;
-
-    const isAuth = await this._authCheck();
-    if (isAuth) {
-
-      try {
-        const arr = (await this._client.project.getComponents({projectIdOrKey: '14850'}));
-        this.components = arr.map((item: any) => ({id: item.id, name: item.name}));
-        return this.components;
-      } catch (err) {
-        if (typeof (err) === 'string') {
-          const r = JSON.parse(err);
-
-          if (r.statusCode === 401) {
-            await setStorageKey('authInfo', null);
-            this._client = null;
-          }
-        }
-        console.log('get components error', err);
-        return null;
-      }
-    }
+    const res = await sendMessage({type: 'getComponents' });
+    this.components = res;
+    return res;
   }
 
   async _authCheck() {
@@ -78,28 +62,15 @@ class jiraHelper {
   }
 
   async authJiraUser(userInfo: jiraAuth): Promise<boolean> {
+    const res = await sendMessage({type: 'login', userInfo });
+
     this._client = new JiraClient({
       host: 'jira.ringcentral.com',
       basic_auth: userInfo,
       strictSSL: false
     });
-    try {
-      await this._client.auth.logout();
-    } catch (err) {
-      console.log('logout', JSON.parse(err));
-    }
-    try {
-      const user = await this._client.auth.currentUser();
-      this._authPromise && this._authPromise(true);
-      await setStorageKey('authInfo', userInfo);
-      console.log(user);
-      return true;
-    } catch (err) {
-      console.log('auth error', JSON.parse(err));
-      this._client = null;
-      this._authPromise && this._authPromise(false);
-      return false;
-    }
+
+    return res;
   }
 
   async createJiraIssue(issue: jiraTicketTmp) {
