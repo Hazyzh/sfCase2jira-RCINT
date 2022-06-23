@@ -33,7 +33,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://rc.my.salesforce.com/500*"],
+      "matches": ["https://rc.my.salesforce.com/500*", "https://hazyzh-dev-ed.my.salesforce.com/500*"],
       "js": ["content-script.js"]
     }
   ]

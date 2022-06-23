@@ -1,11 +1,17 @@
-import React,{ ReactElement, useState } from 'react';
+import './app.scss';
+
+import React, {
+  ReactElement,
+  useState,
+} from 'react';
+
 import Fab from '@material-ui/core/Fab';
-import EditModal from './EditModal';
-import LoginModal from './LoginModal';
-import InfoModal from './InfoModal';
+
 import { initInfosProps } from '../interface';
-import './app.sass';
-import jiraHelper from '../jiraHelper'; 
+import jiraHelper from '../jiraHelper';
+import EditModal from './EditModal';
+import InfoModal from './InfoModal';
+import LoginModal from './LoginModal';
 
 export default function App({ initInfos } : { initInfos: initInfosProps }) {
   const [open, setOpen] = useState(false);
